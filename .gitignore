@@ -156,3 +156,4 @@ __pycache__/
 .DS_Store
 .vscode
 hidden_vars.py
+clean_sentences.txt
