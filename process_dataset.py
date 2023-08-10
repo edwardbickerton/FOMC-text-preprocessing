@@ -1,6 +1,6 @@
 import pandas as pd
 from nltk.tokenize import sent_tokenize, word_tokenize
-from text_preprocess_functions import (
+from preprocessing_rules import (
     remove_urls,
     capitalisation_normalisation,
     remove_accents,
