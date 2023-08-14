@@ -14,22 +14,23 @@ from preprocessing_rules import (
 
 
 class Configuration:
-    def __init__(self, name, rules={"sentence": [], "word_list": []}):
+    def __init__(self, name, sentence_rules=[], word_list_rules=[]):
         self.name = name
-        self.rules = rules
+        self.sentence_rules = sentence_rules
+        self.word_list_rules = word_list_rules
 
     def sentences(self, string):
         return sent_tokenize(string)
 
     def preprocess_sentence(self, sentence):
-        for sentence_rule in self.rules["sentence"]:
+        for sentence_rule in self.sentence_rules:
             sentence = sentence_rule(sentence)
         word_list = word_tokenize(sentence)
         word_list = [word for word in word_list if word != ""]
         return word_list
 
     def preprocess_word_list(self, word_list):
-        for word_list_rule in self.rules["word_list"]:
+        for word_list_rule in self.word_list_rules:
             word_list = word_list_rule(word_list)
         return word_list
 
@@ -41,36 +42,44 @@ class Configuration:
                 yield word_list
 
 
-baseline_config = Configuration("baseline")
-baseline_config.rules["word_list"] = [
-    remove_punctuation,
-]
+baseline_config = Configuration(
+    "baseline",
+    word_list_rules=[
+        remove_punctuation,
+    ],
+)
 
-lightweight_config = Configuration("lightweight")
-lightweight_config.rules["sentence"] = [
-    remove_urls,
-    expand_contractions,
-    capitalisation_normalisation,
-    remove_accents,
-]
-lightweight_config.rules["word_list"] = [
-    remove_punctuation,
-    remove_numbers,
-    remove_stopwords,
-]
+lightweight_config = Configuration(
+    "lightweight",
+    sentence_rules=[
+        remove_urls,
+        expand_contractions,
+        capitalisation_normalisation,
+        remove_accents,
+    ],
+    word_list_rules=[
+        remove_punctuation,
+        remove_numbers,
+        remove_stopwords,
+    ],
+)
 
-heavyweight_config = Configuration("heavyweight")
-heavyweight_config.rules["sentence"] = [
-    remove_urls,
-    expand_contractions,
-    capitalisation_normalisation,
-    remove_accents,
-]
-heavyweight_config.rules["word_list"] = [
-    remove_punctuation,
-    remove_numbers,
-    remove_stopwords,
-    remove_short_words,
-    n_gram_creation,
-    lemmatization,
-]
+heavyweight_config = Configuration(
+    "heavyweight",
+    sentence_rules=[
+        remove_urls,
+        expand_contractions,
+        capitalisation_normalisation,
+        remove_accents,
+    ],
+    word_list_rules=[
+        remove_punctuation,
+        remove_numbers,
+        remove_stopwords,
+        remove_short_words,
+        n_gram_creation,
+        lemmatization,
+    ],
+)
+
+CONFIGS = [baseline_config, lightweight_config, heavyweight_config]
