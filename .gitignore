@@ -157,3 +157,4 @@ __pycache__/
 .vscode
 hidden_vars.py
 n_grams.csv
+preprocessed_data/
