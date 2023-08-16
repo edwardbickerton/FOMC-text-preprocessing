@@ -42,6 +42,8 @@ class Configuration:
                 yield word_list
 
 
+basic_tokenizer_config = Configuration("basic_tokenizer")
+
 baseline_config = Configuration(
     "baseline",
     word_list_rules=[
@@ -82,4 +84,10 @@ heavyweight_config = Configuration(
     ],
 )
 
-CONFIGS = [baseline_config, lightweight_config, heavyweight_config]
+
+CONFIGS = [
+    basic_tokenizer_config,
+    baseline_config,
+    lightweight_config,
+    heavyweight_config,
+]
