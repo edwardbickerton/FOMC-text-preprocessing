@@ -152,7 +152,6 @@ cython_debug/
 #.idea/
 
 # Additions to default python gitignore
-__pycache__/
 .DS_Store
 .vscode
 hidden_vars.py
