@@ -11,6 +11,7 @@ from preprocessing_rules import (
     expand_contractions,
     remove_punctuation,
     remove_numbers,
+    lemmatization,
 )
 from global_vars import (
     ALL_DOCS_FILE,
@@ -21,17 +22,20 @@ from global_vars import (
 )
 
 
-n_gram_config = Configuration("n_gram")
-n_gram_config.rules["sentence"] = [
-    remove_urls,
-    expand_contractions,
-    capitalisation_normalisation,
-    remove_accents,
-]
-n_gram_config.rules["word_list"] = [
-    remove_punctuation,
-    remove_numbers,
-]
+n_gram_config = Configuration(
+    "n_gram",
+    sentence_rules=[
+        remove_urls,
+        expand_contractions,
+        capitalisation_normalisation,
+        remove_accents,
+    ],
+    word_list_rules=[
+        remove_punctuation,
+        remove_numbers,
+        lemmatization,
+    ],
+)
 
 
 def yield_document(path):

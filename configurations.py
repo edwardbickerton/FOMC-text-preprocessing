@@ -77,10 +77,10 @@ heavyweight_config = Configuration(
     word_list_rules=[
         remove_punctuation,
         remove_numbers,
+        lemmatization,
         remove_stopwords,
         remove_short_words,
         n_gram_creation,
-        lemmatization,
     ],
 )
 
