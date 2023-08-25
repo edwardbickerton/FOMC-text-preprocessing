@@ -15,7 +15,7 @@ from preprocessing_rules import (
 from global_vars import ALL_DOCS_FILE_PATH, NUM_DOCS
 
 THRESHOLDS = [0.4, 0.4, 0.4]
-MIN_COUNT = 2**10
+MIN_COUNT = 2**11 + 2**10
 FREEZE = False
 
 
