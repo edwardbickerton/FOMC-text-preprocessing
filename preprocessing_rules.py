@@ -5,12 +5,14 @@ from nltk.corpus import stopwords
 from nltk.tag import pos_tag
 from nltk.stem import WordNetLemmatizer
 from nltk.util import everygrams
+from gensim.models.phrases import Phrases
 
 from n_grams import min_frequency_n_grams
 from global_vars import MAX_N_GRAM_LENGTH
 
 STOPWORDS = set(stopwords.words("english"))
-N_GRAMS = min_frequency_n_grams(2**10)
+N_GRAMS = None
+GENSIM_PHRASES = None
 
 
 def remove_urls(sentence):
@@ -81,6 +83,10 @@ def lemmatization(word_list):
 
 
 def n_gram_creation(word_list):
+    global N_GRAMS
+    if N_GRAMS is None:
+        N_GRAMS = min_frequency_n_grams(2**10)
+
     sentence_n_grams = set(
         n_gram
         for n_gram in everygrams(
@@ -113,3 +119,19 @@ def n_gram_creation(word_list):
         i += 1
 
     return n_gram_creation(result)
+
+
+def gensim_phrase(word_list):
+    global GENSIM_PHRASES
+
+    if GENSIM_PHRASES is None:
+        GENSIM_PHRASES = [
+            Phrases.load(f"gensim_phrase_models/{n}gram_phrases.pkl")
+            for n in ["bi", "tri", "four"]
+        ]
+
+    n_gram_word_list = word_list
+    for phrase_model in GENSIM_PHRASES:
+        n_gram_word_list = phrase_model[n_gram_word_list]
+
+    return n_gram_word_list

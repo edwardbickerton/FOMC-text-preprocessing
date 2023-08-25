@@ -9,7 +9,7 @@ from preprocessing_rules import (
     remove_stopwords,
     remove_short_words,
     lemmatization,
-    n_gram_creation,
+    gensim_phrase,
 )
 
 
@@ -80,7 +80,7 @@ heavyweight_config = Configuration(
         lemmatization,
         remove_stopwords,
         remove_short_words,
-        n_gram_creation,
+        gensim_phrase,
     ],
 )
 
