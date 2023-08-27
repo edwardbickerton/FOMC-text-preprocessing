@@ -12,6 +12,8 @@ from preprocessing_rules import (
     remove_punctuation,
     remove_numbers,
     lemmatization,
+    remove_stopwords,
+    remove_short_words,
 )
 from global_vars import (
     ALL_DOCS_FILE,
@@ -34,6 +36,8 @@ n_gram_config = Configuration(
         remove_punctuation,
         remove_numbers,
         lemmatization,
+        remove_stopwords,
+        remove_short_words,
     ],
 )
 

@@ -5,18 +5,19 @@ from gensim.models.phrases import Phrases, ENGLISH_CONNECTOR_WORDS
 from configurations import Configuration
 from preprocessing_rules import (
     remove_urls,
+    expand_contractions,
     capitalisation_normalisation,
     remove_accents,
-    expand_contractions,
     remove_punctuation,
     remove_numbers,
     lemmatization,
+    remove_stopwords,
+    remove_short_words,
 )
 from global_vars import ALL_DOCS_FILE_PATH, NUM_DOCS
 
-THRESHOLDS = [0.7, 0.55, 0.48]
-MIN_COUNT = 3000
-FREEZE = False
+THRESHOLDS = [0.66, 0.61, 0.57]
+MIN_COUNT = 3067
 
 
 n_gram_config = Configuration(
@@ -31,6 +32,8 @@ n_gram_config = Configuration(
         remove_punctuation,
         remove_numbers,
         lemmatization,
+        remove_stopwords,
+        remove_short_words,
     ],
 )
 
@@ -72,8 +75,6 @@ bigram_model = Phrases(
     scoring="npmi",
     connector_words=ENGLISH_CONNECTOR_WORDS,
 )
-if FREEZE:
-    bigram_model = bigram_model.freeze()
 bigram_model.save("gensim_phrase_models/bigram_phrases.pkl")
 
 
@@ -93,8 +94,6 @@ trigram_model = Phrases(
     scoring="npmi",
     connector_words=ENGLISH_CONNECTOR_WORDS,
 )
-if FREEZE:
-    trigram_model = trigram_model.freeze()
 trigram_model.save("gensim_phrase_models/trigram_phrases.pkl")
 
 
@@ -114,6 +113,4 @@ fourgram_model = Phrases(
     scoring="npmi",
     connector_words=ENGLISH_CONNECTOR_WORDS,
 )
-if FREEZE:
-    fourgram_model = fourgram_model.freeze()
 fourgram_model.save("gensim_phrase_models/fourgram_phrases.pkl")

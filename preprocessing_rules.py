@@ -126,7 +126,7 @@ def gensim_phrase(word_list):
 
     if GENSIM_PHRASES is None:
         GENSIM_PHRASES = [
-            Phrases.load(f"gensim_phrase_models/{n}gram_phrases.pkl")
+            Phrases.load(f"gensim_phrase_models/{n}gram_phrases.pkl").freeze()
             for n in ["bi", "tri", "four"]
         ]
 
