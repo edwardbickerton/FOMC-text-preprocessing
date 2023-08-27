@@ -2,40 +2,11 @@ import pandas as pd
 from tqdm import tqdm
 from gensim.models.phrases import Phrases, ENGLISH_CONNECTOR_WORDS
 
-from configurations import Configuration
-from preprocessing_rules import (
-    remove_urls,
-    expand_contractions,
-    capitalisation_normalisation,
-    remove_accents,
-    remove_punctuation,
-    remove_numbers,
-    lemmatization,
-    remove_stopwords,
-    remove_short_words,
-)
+from configurations import lightweight_config
 from global_vars import ALL_DOCS_FILE_PATH, NUM_DOCS
 
 THRESHOLDS = [0.66, 0.61, 0.57]
 MIN_COUNT = 3067
-
-
-n_gram_config = Configuration(
-    "n_gram",
-    sentence_rules=[
-        remove_urls,
-        expand_contractions,
-        capitalisation_normalisation,
-        remove_accents,
-    ],
-    word_list_rules=[
-        remove_punctuation,
-        remove_numbers,
-        lemmatization,
-        remove_stopwords,
-        remove_short_words,
-    ],
-)
 
 
 def yield_document(path):
@@ -61,12 +32,21 @@ class LoadSentence:
         for document in tqdm(
             yield_document(self.path), total=NUM_DOCS, unit="documents"
         ):
-            for sentence in n_gram_config.preprocess_document_string(document):
+            for sentence in lightweight_config.preprocess_document_string(document):
                 yield sentence
 
 
-sentences = LoadSentence(ALL_DOCS_FILE_PATH)
+class LoadNgramSentence:
+    def __init__(self, phrase_model):
+        self.phrase_model = phrase_model
+
+    def __iter__(self):
+        for sentence in LoadSentence(ALL_DOCS_FILE_PATH):
+            yield self.phrase_model[sentence]
+
+
 print("TRAINING BIGRAM MODEL")
+sentences = LoadSentence(ALL_DOCS_FILE_PATH)
 bigram_model = Phrases(
     sentences,
     min_count=MIN_COUNT,
@@ -78,14 +58,8 @@ bigram_model = Phrases(
 bigram_model.save("gensim_phrase_models/bigram_phrases.pkl")
 
 
-class LoadBigramSentence:
-    def __iter__(self):
-        for sentence in LoadSentence(ALL_DOCS_FILE_PATH):
-            yield bigram_model[sentence]
-
-
-bigram_sentences = LoadBigramSentence()
 print("TRAINING TRIGRAM MODEL")
+bigram_sentences = LoadNgramSentence(bigram_model)
 trigram_model = Phrases(
     bigram_sentences,
     min_count=MIN_COUNT,
@@ -97,14 +71,8 @@ trigram_model = Phrases(
 trigram_model.save("gensim_phrase_models/trigram_phrases.pkl")
 
 
-class LoadTrigramSentence:
-    def __iter__(self):
-        for sentence in LoadBigramSentence():
-            yield trigram_model[sentence]
-
-
-trigram_sentences = LoadTrigramSentence()
 print("TRAINING FOURGRAM MODEL")
+trigram_sentences = LoadNgramSentence(trigram_model)
 fourgram_model = Phrases(
     trigram_sentences,
     min_count=MIN_COUNT,

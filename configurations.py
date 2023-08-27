@@ -46,8 +46,14 @@ basic_tokenizer_config = Configuration("basic_tokenizer")
 
 baseline_config = Configuration(
     "baseline",
+    sentence_rules=[
+        remove_urls,
+        remove_accents,
+        capitalisation_normalisation,
+    ],
     word_list_rules=[
         remove_punctuation,
+        remove_numbers,
     ],
 )
 
@@ -55,14 +61,16 @@ lightweight_config = Configuration(
     "lightweight",
     sentence_rules=[
         remove_urls,
-        expand_contractions,
-        capitalisation_normalisation,
         remove_accents,
+        capitalisation_normalisation,
+        expand_contractions,
     ],
     word_list_rules=[
         remove_punctuation,
         remove_numbers,
+        lemmatization,
         remove_stopwords,
+        remove_short_words,
     ],
 )
 
@@ -70,9 +78,9 @@ heavyweight_config = Configuration(
     "heavyweight",
     sentence_rules=[
         remove_urls,
-        expand_contractions,
-        capitalisation_normalisation,
         remove_accents,
+        capitalisation_normalisation,
+        expand_contractions,
     ],
     word_list_rules=[
         remove_punctuation,

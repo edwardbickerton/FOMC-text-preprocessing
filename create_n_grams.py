@@ -3,42 +3,13 @@ import pandas as pd
 from tqdm import tqdm
 import time
 
-from configurations import Configuration
-from preprocessing_rules import (
-    remove_urls,
-    capitalisation_normalisation,
-    remove_accents,
-    expand_contractions,
-    remove_punctuation,
-    remove_numbers,
-    lemmatization,
-    remove_stopwords,
-    remove_short_words,
-)
+from configurations import lightweight_config
 from global_vars import (
     ALL_DOCS_FILE,
     ALL_DOCS_FILE_PATH,
     N_GRAM_FILE_PATH,
     NUM_DOCS,
     MAX_N_GRAM_LENGTH,
-)
-
-
-n_gram_config = Configuration(
-    "n_gram",
-    sentence_rules=[
-        remove_urls,
-        expand_contractions,
-        capitalisation_normalisation,
-        remove_accents,
-    ],
-    word_list_rules=[
-        remove_punctuation,
-        remove_numbers,
-        lemmatization,
-        remove_stopwords,
-        remove_short_words,
-    ],
 )
 
 
@@ -64,7 +35,7 @@ if __name__ == "__main__":
     for document in tqdm(
         yield_document(ALL_DOCS_FILE_PATH), total=NUM_DOCS, unit="documents"
     ):
-        for sentence in n_gram_config.preprocess_document_string(document):
+        for sentence in lightweight_config.preprocess_document_string(document):
             for n_gram in everygrams(sentence, min_len=2, max_len=MAX_N_GRAM_LENGTH):
                 if n_gram in n_gram_frequencies:
                     n_gram_frequencies[n_gram] += 1
