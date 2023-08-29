@@ -5,7 +5,7 @@ from gensim.models.phrases import Phrases, ENGLISH_CONNECTOR_WORDS
 from configurations import lightweight_config
 from global_vars import ALL_DOCS_FILE_PATH, NUM_DOCS
 
-THRESHOLDS = [0.66, 0.61, 0.57]
+THRESHOLDS = [0.66, 0.6, 0.5]
 MIN_COUNT = 3067
 
 
